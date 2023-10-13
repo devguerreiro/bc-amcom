@@ -1,3 +1,5 @@
-# from django.contrib import admin
+from django.contrib import admin
 
-# Register your models here.
+from paper.core.domain.entity.product import Product
+
+admin.site.register(Product)
