@@ -31,7 +31,6 @@ class SaleItem(models.Model):
     )
 
     class Meta:
-        managed = False
         verbose_name = "Item"
         verbose_name_plural = "Itens"
 
@@ -71,7 +70,6 @@ class Sale(models.Model):
     )
 
     class Meta:
-        managed = False
         verbose_name = "Venda"
         verbose_name_plural = "Vendas"
 

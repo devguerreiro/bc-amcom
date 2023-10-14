@@ -1,7 +1,31 @@
-from decimal import Decimal
-
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+
+from paper.core.utils.field import CommissionPercentField, Weekday
+
+
+class CommissionPercentLimit(models.Model):
+    weekday = models.IntegerField(
+        choices=Weekday.choices,
+        unique=True,
+        verbose_name="Dia da semana",
+    )
+    min_commission_percent = CommissionPercentField(
+        verbose_name="Porcentagem mínima da comissão",
+    )
+    max_commission_percent = CommissionPercentField(
+        verbose_name="Porcentagem máxima da comissão",
+    )
+
+    class Meta:
+        verbose_name = "Limite Porcentagem da Comissão"
+        verbose_name_plural = "Limites Porcentagem da Comissão"
+
+    def __str__(self):
+        weekday = Weekday.choices[self.weekday][1]
+        return f"{weekday} - Mínimo {self.min_commission_percent}% | Máximo {self.max_commission_percent}%"
+
+    def __repr__(self) -> str:
+        return str(self)
 
 
 class Product(models.Model):
@@ -20,18 +44,15 @@ class Product(models.Model):
         decimal_places=2,
         verbose_name="Preço",
     )
-    commission_percent = models.DecimalField(
-        max_digits=4,
-        decimal_places=2,
-        validators=[
-            MinValueValidator(Decimal("0.00")),
-            MaxValueValidator(Decimal("10.00")),
-        ],
-        verbose_name="Porcentagem de Comissão",
+    commission_percent = CommissionPercentField(
+        verbose_name="Porcentagem da comissão",
+    )
+    commission_percent_limits = models.ManyToManyField(
+        CommissionPercentLimit,
+        verbose_name="Limites Porcentagem da Comissão",
     )
 
     class Meta:
-        managed = False
         verbose_name = "Produto"
         verbose_name_plural = "Produtos"
 
