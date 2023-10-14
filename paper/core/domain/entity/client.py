@@ -2,16 +2,16 @@ from django.db import models
 
 
 class Client(models.Model):
-    name: str = models.CharField(
+    name = models.CharField(
         max_length=100,
         verbose_name="Nome do cliente",
     )
-    email: str = models.EmailField(
+    email = models.EmailField(
         max_length=50,
         unique=True,
         verbose_name="E-mail do cliente",
     )
-    phone: str = models.CharField(
+    phone = models.CharField(
         max_length=20,
         unique=True,
         verbose_name="Contato do cliente",

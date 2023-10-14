@@ -5,22 +5,22 @@ from django.db import models
 
 
 class Product(models.Model):
-    code: str = models.CharField(
+    code = models.CharField(
         unique=True,
         max_length=20,
         verbose_name="Código",
     )
-    description: str = models.TextField(
+    description = models.TextField(
         blank=True,
         null=True,
         verbose_name="Descrição",
     )
-    price: Decimal = models.DecimalField(
+    price = models.DecimalField(
         max_digits=8,
         decimal_places=2,
         verbose_name="Preço",
     )
-    commission_percent: Decimal = models.DecimalField(
+    commission_percent = models.DecimalField(
         max_digits=4,
         decimal_places=2,
         validators=[
@@ -31,6 +31,7 @@ class Product(models.Model):
     )
 
     class Meta:
+        managed = False
         verbose_name = "Produto"
         verbose_name_plural = "Produtos"
 

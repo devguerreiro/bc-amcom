@@ -1,6 +1,3 @@
-from datetime import datetime
-from typing import List
-
 from django.core.validators import MinValueValidator
 from django.db import models
 
@@ -10,30 +7,31 @@ from paper.core.domain.entity.seller import Seller
 
 
 class SaleItem(models.Model):
-    sale: "Sale" = models.ForeignKey(
+    sale = models.ForeignKey(
         "Sale",
         on_delete=models.CASCADE,
         verbose_name="Venda",
     )
-    product: Product = models.ForeignKey(
+    product = models.ForeignKey(
         Product,
         on_delete=models.PROTECT,
         verbose_name="Produto",
     )
-    quantity: int = models.IntegerField(
+    quantity = models.IntegerField(
         validators=[MinValueValidator(1)],
         verbose_name="Quantidade",
     )
-    created_at: datetime = models.DateTimeField(
+    created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name="Data/hora da venda",
     )
-    updated_at: datetime = models.DateTimeField(
+    updated_at = models.DateTimeField(
         auto_now=True,
         verbose_name="Data/hora da alteração",
     )
 
     class Meta:
+        managed = False
         verbose_name = "Item"
         verbose_name_plural = "Itens"
 
@@ -45,31 +43,35 @@ class SaleItem(models.Model):
 
 
 class Sale(models.Model):
-    nfe: str = models.CharField(
+    nfe = models.CharField(
         max_length=50,
         unique=True,
         verbose_name="Código NFE",
     )
-    client: Seller = models.ForeignKey(
+    client = models.ForeignKey(
         Seller,
         on_delete=models.PROTECT,
         related_name="purchases",
         verbose_name="Cliente",
     )
-    seller: Client = models.ForeignKey(
+    seller = models.ForeignKey(
         Client,
         on_delete=models.PROTECT,
         related_name="sales",
         verbose_name="Vendedor",
     )
-    items: List[Product] = models.ManyToManyField(
-        Product, through=SaleItem, verbose_name="Itens"
+    items = models.ManyToManyField(
+        Product,
+        through=SaleItem,
+        verbose_name="Itens",
     )
-    created_at: datetime = models.DateTimeField(
-        auto_now_add=True, verbose_name="Data/Hora da venda"
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Data/Hora da venda",
     )
 
     class Meta:
+        managed = False
         verbose_name = "Venda"
         verbose_name_plural = "Vendas"
 
