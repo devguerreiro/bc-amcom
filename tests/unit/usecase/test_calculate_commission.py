@@ -3,8 +3,6 @@ from decimal import Decimal
 import pytest
 
 from paper.core.application.usecase.calculate_commission import CalculateCommission
-from paper.core.domain.entity.product import Product
-from paper.core.domain.entity.sale import SaleItem
 
 
 class TestCalculateCommission:
@@ -19,6 +17,8 @@ class TestCalculateCommission:
         ],
     )
     def test_should_return_the_total_sale_commission_of_one_product(
+        make_product,
+        make_sale_item,
         mocker,
         price,
         commission_percent,
@@ -26,17 +26,14 @@ class TestCalculateCommission:
         expected,
     ):
         # given
-        product = Product(
-            price=price,
-            commission_percent=commission_percent,
-        )
+        product = make_product(price, commission_percent)
 
         sale_stub = mocker.stub(name="sale")
 
         repo_stub = mocker.stub(name="repo")
         repo_stub.get_items = mocker.MagicMock(
             return_value=[
-                SaleItem(product=product, quantity=quantity),
+                make_sale_item(product, quantity),
             ]
         )
 
@@ -52,19 +49,20 @@ class TestCalculateCommission:
         [
             (
                 [
-                    Product(price=Decimal("750.00"), commission_percent=Decimal("10.00")),
-                    Product(price=Decimal("120.50"), commission_percent=Decimal("4.50")),
-                ],
-                5,
-                Decimal("402.11"),
+                    # price             # commission percent
+                    (Decimal("750.00"), Decimal("10.00")),
+                    (Decimal("120.50"), Decimal("4.50")),
+                ],  # products
+                5,  # quantity
+                Decimal("402.11"),  # expected
             ),
             (
                 [
-                    Product(price=Decimal("750.00"), commission_percent=Decimal("10.00")),
-                    Product(price=Decimal("120.50"), commission_percent=Decimal("4.50")),
-                    Product(price=Decimal("10150.79"), commission_percent=Decimal("3.74")),
-                    Product(price=Decimal("549.90"), commission_percent=Decimal("8.67")),
-                    Product(price=Decimal("3370.59"), commission_percent=Decimal("2.35")),
+                    (Decimal("750.00"), Decimal("10.00")),
+                    (Decimal("120.50"), Decimal("4.50")),
+                    (Decimal("10150.79"), Decimal("3.74")),
+                    (Decimal("549.90"), Decimal("8.67")),
+                    (Decimal("3370.59"), Decimal("2.35")),
                 ],
                 3,
                 Decimal("1760.84"),
@@ -72,6 +70,8 @@ class TestCalculateCommission:
         ],
     )
     def test_should_return_the_total_sale_commission_of_many_products(
+        make_product,
+        make_sale_item,
         mocker,
         products,
         quantity,
@@ -82,7 +82,13 @@ class TestCalculateCommission:
 
         repo_stub = mocker.stub(name="repo")
         repo_stub.get_items = mocker.MagicMock(
-            return_value=[SaleItem(product=product, quantity=quantity) for product in products]
+            return_value=[
+                make_sale_item(
+                    make_product(price, commission_percent),
+                    quantity,
+                )
+                for price, commission_percent in products
+            ]
         )
 
         # when

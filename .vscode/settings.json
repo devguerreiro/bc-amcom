@@ -1,3 +1,8 @@
 {
-    "conventionalCommits.scopes": ["product", "sale", "django admin"]
+    "conventionalCommits.scopes": [
+        "product",
+        "sale",
+        "django admin",
+        "calculate commission"
+    ]
 }
