@@ -1,8 +1,11 @@
 from decimal import Decimal
+from typing import List, Tuple
 
 import pytest
+from pytest_mock import MockerFixture
 
 from paper.core.application.usecase.calculate_commission import CalculateCommission
+from paper.core.application.usecase.get_commission_percent import GetCommissionPercent
 
 
 class TestCalculateCommission:
@@ -19,26 +22,30 @@ class TestCalculateCommission:
     def test_should_return_the_total_sale_commission_of_one_product(
         make_product,
         make_sale_item,
-        mocker,
-        price,
-        commission_percent,
-        quantity,
-        expected,
+        mocker: MockerFixture,
+        price: Decimal,
+        commission_percent: Decimal,
+        quantity: int,
+        expected: Decimal,
     ):
         # given
         product = make_product(price, commission_percent)
+        sale_item = make_sale_item(product, quantity)
 
         sale_stub = mocker.stub(name="sale")
+        product_repo_stub = mocker.stub(name="product_repo")
+        sale_repo_stub = mocker.stub(name="sale_repo")
 
-        repo_stub = mocker.stub(name="repo")
-        repo_stub.get_items = mocker.MagicMock(
-            return_value=[
-                make_sale_item(product, quantity),
-            ]
+        sale_repo_stub.get_items = mocker.Mock(return_value=[sale_item])
+
+        mocker.patch.object(
+            GetCommissionPercent,
+            "handle",
+            return_value=commission_percent,
         )
 
         # when
-        output = CalculateCommission(repo_stub).handle(sale_stub)
+        output = CalculateCommission(sale_repo_stub, product_repo_stub).handle(sale_stub)
 
         # assert
         assert output == expected
@@ -72,27 +79,34 @@ class TestCalculateCommission:
     def test_should_return_the_total_sale_commission_of_many_products(
         make_product,
         make_sale_item,
-        mocker,
-        products,
-        quantity,
-        expected,
+        mocker: MockerFixture,
+        products: List[Tuple[Decimal, Decimal]],
+        quantity: int,
+        expected: Decimal,
     ):
         # given
         sale_stub = mocker.stub(name="sale")
+        product_repo_stub = mocker.stub(name="product_repo")
+        sale_repo_stub = mocker.stub(name="sale_repo")
 
-        repo_stub = mocker.stub(name="repo")
-        repo_stub.get_items = mocker.MagicMock(
-            return_value=[
-                make_sale_item(
-                    make_product(price, commission_percent),
-                    quantity,
-                )
-                for price, commission_percent in products
-            ]
+        sale_items = [
+            make_sale_item(
+                make_product(price, commission_percent),
+                quantity,
+            )
+            for price, commission_percent in products
+        ]
+
+        sale_repo_stub.get_items = mocker.Mock(return_value=sale_items)
+
+        mocker.patch.object(
+            GetCommissionPercent,
+            "handle",
+            side_effect=lambda p: p.commission_percent,
         )
 
         # when
-        output = CalculateCommission(repo_stub).handle(sale_stub)
+        output = CalculateCommission(sale_repo_stub, product_repo_stub).handle(sale_stub)
 
         # assert
         assert output == expected
