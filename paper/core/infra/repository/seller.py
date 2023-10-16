@@ -11,8 +11,8 @@ class SellerRepository(ISellerRepository):
     def get_by_id(self, pk: int) -> Seller:
         return Seller.objects.get(pk=pk)
 
-    def delete_by_id(self, pk: int) -> Seller:
-        return Seller.objects.filter(id=pk).delete()
+    def delete_by_id(self, pk: int) -> None:
+        Seller.objects.filter(id=pk).delete()
 
     def create(self, seller: Seller) -> Seller:
         seller.save(force_insert=True)

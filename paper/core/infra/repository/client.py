@@ -11,8 +11,8 @@ class ClientRepository(IClientRepository):
     def get_by_id(self, pk: int) -> Client:
         return Client.objects.get(pk=pk)
 
-    def delete_by_id(self, pk: int) -> Client:
-        return Client.objects.filter(id=pk).delete()
+    def delete_by_id(self, pk: int) -> None:
+        Client.objects.filter(id=pk).delete()
 
     def create(self, client: Client) -> Client:
         client.save(force_insert=True)
