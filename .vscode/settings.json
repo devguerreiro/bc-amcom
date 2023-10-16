@@ -3,6 +3,7 @@
         "product",
         "sale",
         "django admin",
-        "calculate commission"
+        "calculate commission",
+        "client"
     ]
 }
