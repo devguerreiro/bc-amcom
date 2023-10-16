@@ -16,3 +16,7 @@ class IClientRepository(ABC):
     @abstractmethod
     def delete_by_id(self, pk: int) -> None:
         pass
+
+    @abstractmethod
+    def create(self, client: Client) -> Client:
+        pass

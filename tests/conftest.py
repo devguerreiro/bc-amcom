@@ -31,8 +31,16 @@ def make_commission_percent_limit():
 
 
 @pytest.fixture()
+def make_client():
+    def factory(*args, **kwargs) -> Product:
+        return baker.prepare(Client, **kwargs)
+
+    return factory
+
+
+@pytest.fixture()
 def populate_client():
-    def factory(*, quantity: int):
+    def factory(*, quantity: int = 1):
         clients = baker.make(Client, _quantity=quantity)
         return clients
 

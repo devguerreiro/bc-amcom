@@ -13,3 +13,7 @@ class ClientRepository(IClientRepository):
 
     def delete_by_id(self, pk: int) -> Client:
         return Client.objects.filter(id=pk).delete()
+
+    def create(self, client: Client) -> Client:
+        client.save(force_insert=True)
+        return client
