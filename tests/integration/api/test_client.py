@@ -21,3 +21,19 @@ class TestClientController:
         assert data[0]["id"] == clients[0].id
         assert data[1]["id"] == clients[1].id
         assert data[2]["id"] == clients[2].id
+
+    @staticmethod
+    def test_should_retrieve_an_existing_client(client, populate_client):
+        # given
+        _client = populate_client(quantity=1)[0]
+
+        url = f"/api/v1/client/{_client.id}/"
+
+        # when
+        response = client.get(url)
+
+        # assert
+        assert response.status_code == 200
+
+        data = dict(response.data)
+        assert data["id"] == _client.id
