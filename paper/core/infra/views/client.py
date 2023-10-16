@@ -19,3 +19,7 @@ class ClientView(ViewSet):
     def retrieve(self, _: Request, pk: int):
         data, status = ClientController(self.client_repo, ReadClientSerializer).retrieve(pk)
         return Response(data=data, status=status)
+
+    def delete(self, _: Request, pk: int):
+        data, status = ClientController(self.client_repo).delete(pk)
+        return Response(data=data, status=status)

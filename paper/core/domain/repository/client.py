@@ -12,3 +12,7 @@ class IClientRepository(ABC):
     @abstractmethod
     def get_by_id(self, pk: int) -> Client:
         pass
+
+    @abstractmethod
+    def delete_by_id(self, pk: int) -> None:
+        pass
