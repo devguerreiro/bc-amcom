@@ -48,13 +48,13 @@ class Sale(models.Model):
         verbose_name="Código NFE",
     )
     client = models.ForeignKey(
-        Seller,
+        Client,
         on_delete=models.PROTECT,
         related_name="purchases",
         verbose_name="Cliente",
     )
     seller = models.ForeignKey(
-        Client,
+        Seller,
         on_delete=models.PROTECT,
         related_name="sales",
         verbose_name="Vendedor",
