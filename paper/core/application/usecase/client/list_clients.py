@@ -5,8 +5,8 @@ from paper.core.domain.repository.client import IClientRepository
 
 
 class ListClients:
-    def __init__(self, client_repo: IClientRepository):
-        self._client_repo = client_repo
+    def __init__(self, repo: IClientRepository):
+        self._repo = repo
 
     def handle(self) -> List[Client]:
-        return self._client_repo.get_all()
+        return self._repo.get_all()
