@@ -1,4 +1,5 @@
 from paper.core.application.usecase.product.list_products import ListProducts
+from paper.core.application.usecase.product.retrieve_product import RetrieveProduct
 from paper.core.controller.serializers.product import IProductReadSerializer
 from paper.core.domain.repository.product import IProductRepository
 
@@ -15,4 +16,9 @@ class ProductController:
     def list(self):
         products = ListProducts(self._repo).handle()
         data = self._read_serializer.to_json(products)
+        return data, 200
+
+    def retrieve(self, pk: int):
+        product = RetrieveProduct(self._repo).handle(pk)
+        data = self._read_serializer.to_json(product)
         return data, 200

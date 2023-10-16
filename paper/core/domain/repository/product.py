@@ -10,5 +10,9 @@ class IProductRepository(ABC):
         pass
 
     @abstractmethod
+    def get_by_id(self, pk: int) -> Product:
+        pass
+
+    @abstractmethod
     def get_commission_percent_limits(self, product: Product) -> List[CommissionPercentLimit]:
         pass

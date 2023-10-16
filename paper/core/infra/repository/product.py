@@ -8,5 +8,8 @@ class ProductRepository(IProductRepository):
     def get_all(self) -> List[Product]:
         return list(Product.objects.all())
 
+    def get_by_id(self, pk: int) -> Product:
+        return Product.objects.get(pk=pk)
+
     def get_commission_percent_limits(self, product: Product) -> List[CommissionPercentLimit]:
         pass
