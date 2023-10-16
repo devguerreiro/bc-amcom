@@ -1,3 +1,6 @@
+from decimal import Decimal
+from random import random
+
 import pytest
 from model_bakery import baker
 
@@ -5,6 +8,8 @@ from paper.core.domain.entity.client import Client
 from paper.core.domain.entity.product import CommissionPercentLimit, Product
 from paper.core.domain.entity.sale import SaleItem
 from paper.core.domain.entity.seller import Seller
+
+baker.generators.add("paper.core.utils.field.CommissionPercentField", lambda: Decimal(random()))
 
 
 @pytest.fixture()
@@ -65,3 +70,13 @@ def make_seller():
         return baker.prepare(Seller, **kwargs)
 
     return factory
+
+
+@pytest.fixture()
+def populate_product():
+    def factory(*, quantity: int = 1):
+        products = baker.make(Product, _quantity=quantity)
+        return products
+
+    yield factory
+    Product.objects.all().delete()

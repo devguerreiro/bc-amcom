@@ -1,14 +1,12 @@
-from abc import ABC, abstractmethod
 from typing import List
 
 from paper.core.domain.entity.product import CommissionPercentLimit, Product
+from paper.core.domain.repository.product import IProductRepository
 
 
-class IProductRepository(ABC):
-    @abstractmethod
+class ProductRepository(IProductRepository):
     def get_all(self) -> List[Product]:
-        pass
+        return list(Product.objects.all())
 
-    @abstractmethod
     def get_commission_percent_limits(self, product: Product) -> List[CommissionPercentLimit]:
         pass
