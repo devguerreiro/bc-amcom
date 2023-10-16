@@ -6,7 +6,7 @@ from paper.core.domain.repository.product import IProductRepository
 
 class ProductRepository(IProductRepository):
     def get_all(self) -> List[Product]:
-        return list(Product.objects.all())
+        return list(Product.objects.prefetch_related("commission_percent_limits").all())
 
     def get_by_id(self, pk: int) -> Product:
         return Product.objects.get(pk=pk)
