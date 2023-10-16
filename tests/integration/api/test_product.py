@@ -1,5 +1,7 @@
 import pytest
 
+from paper.core.domain.entity.product import Product
+
 
 @pytest.mark.django_db
 class TestProductAPI:
@@ -40,21 +42,21 @@ class TestProductAPI:
         data = dict(response.data)
         assert data["id"] == product.id
 
-    # @staticmethod
-    # def test_should_delete_an_existing_client(client, populate_client):
-    #     # given
-    #     _client = populate_client()[0]
+    @staticmethod
+    def test_should_delete_an_existing_product(client, populate_product):
+        # given
+        product = populate_product()[0]
 
-    #     url = f"{TestClientAPI.BASE_URL}/{_client.id}/"
+        url = f"{TestProductAPI.BASE_URL}/{product.id}/"
 
-    #     # when
-    #     response = client.delete(url)
+        # when
+        response = client.delete(url)
 
-    #     # assert
-    #     assert response.status_code == 204
-    #     assert response.data is None
+        # assert
+        assert response.status_code == 204
+        assert response.data is None
 
-    #     assert Client.objects.count() == 0
+        assert Product.objects.count() == 0
 
     # @staticmethod
     # def test_should_create_a_new_client(client, make_client):

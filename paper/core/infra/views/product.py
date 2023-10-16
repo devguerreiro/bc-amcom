@@ -24,3 +24,10 @@ class ProductView(ViewSet):
             self.read_serializer,
         ).retrieve(pk)
         return Response(data=data, status=status)
+
+    def delete(self, _: Request, pk: int):
+        data, status = ProductController(
+            self.repo,
+            self.read_serializer,
+        ).delete(pk)
+        return Response(data=data, status=status)

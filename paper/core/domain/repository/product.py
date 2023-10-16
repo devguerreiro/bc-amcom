@@ -14,5 +14,9 @@ class IProductRepository(ABC):
         pass
 
     @abstractmethod
+    def delete_by_id(self, pk: int) -> None:
+        pass
+
+    @abstractmethod
     def get_commission_percent_limits(self, product: Product) -> List[CommissionPercentLimit]:
         pass

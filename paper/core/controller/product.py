@@ -1,3 +1,4 @@
+from paper.core.application.usecase.product.delete_product import DeleteProduct
 from paper.core.application.usecase.product.list_products import ListProducts
 from paper.core.application.usecase.product.retrieve_product import RetrieveProduct
 from paper.core.controller.serializers.product import IProductReadSerializer
@@ -22,3 +23,7 @@ class ProductController:
         product = RetrieveProduct(self._repo).handle(pk)
         data = self._read_serializer.to_json(product)
         return data, 200
+
+    def delete(self, pk: int):
+        DeleteProduct(self._repo).handle(pk)
+        return None, 204

@@ -11,5 +11,8 @@ class ProductRepository(IProductRepository):
     def get_by_id(self, pk: int) -> Product:
         return Product.objects.get(pk=pk)
 
+    def delete_by_id(self, pk: int) -> None:
+        Product.objects.filter(id=pk).delete()
+
     def get_commission_percent_limits(self, product: Product) -> List[CommissionPercentLimit]:
         pass
