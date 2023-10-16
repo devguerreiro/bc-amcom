@@ -29,8 +29,11 @@ class TestCalculateCommission:
         expected: Decimal,
     ):
         # given
-        product = make_product(price, commission_percent)
-        sale_item = make_sale_item(product, quantity)
+        product = make_product(
+            price=price,
+            commission_percent=commission_percent,
+        )
+        sale_item = make_sale_item(product=product, quantity=quantity)
 
         sale_stub = mocker.stub(name="sale")
         product_repo_stub = mocker.stub(name="product_repo")
@@ -91,8 +94,11 @@ class TestCalculateCommission:
 
         sale_items = [
             make_sale_item(
-                make_product(price, commission_percent),
-                quantity,
+                product=make_product(
+                    price=price,
+                    commission_percent=commission_percent,
+                ),
+                quantity=quantity,
             )
             for price, commission_percent in products
         ]

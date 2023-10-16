@@ -37,9 +37,9 @@ class TestGetCommissionPercent:
         product_repo_stub.get_commission_percent_limits = mocker.Mock(
             return_value=[
                 make_commission_percent_limit(
-                    Weekday.MONDAY,  # limit for monday
-                    min_commission_percent,
-                    max_commission_percent,
+                    weekday=Weekday.MONDAY,  # limit for monday
+                    min_commission_percent=min_commission_percent,
+                    max_commission_percent=max_commission_percent,
                 )
             ]
         )
@@ -88,9 +88,9 @@ class TestGetCommissionPercent:
         product_repo_stub.get_commission_percent_limits = mocker.Mock(
             return_value=[
                 make_commission_percent_limit(
-                    Weekday.MONDAY,  # limit for monday
-                    Decimal("3.00"),
-                    Decimal("5.00"),
+                    weekday=Weekday.MONDAY,  # limit for monday
+                    min_commission_percent=Decimal("3.00"),
+                    max_commission_percent=Decimal("5.00"),
                 )
             ]
         )
