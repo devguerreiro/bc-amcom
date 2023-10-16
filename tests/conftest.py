@@ -9,7 +9,10 @@ from paper.core.domain.entity.product import CommissionPercentLimit, Product
 from paper.core.domain.entity.sale import SaleItem
 from paper.core.domain.entity.seller import Seller
 
-baker.generators.add("paper.core.utils.field.CommissionPercentField", lambda: Decimal(random()))
+baker.generators.add(
+    "paper.core.utils.field.CommissionPercentField",
+    lambda: round(Decimal(random() * 10), 2),
+)
 
 
 @pytest.fixture()

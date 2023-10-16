@@ -58,29 +58,30 @@ class TestProductAPI:
 
         assert Product.objects.count() == 0
 
-    # @staticmethod
-    # def test_should_create_a_new_client(client, make_client):
-    #     # given
-    #     _client = make_client()
+    @staticmethod
+    def test_should_create_a_new_product(client, make_product):
+        # given
+        product = make_product()
 
-    #     url = TestClientAPI.BASE_URL + "/"
+        url = TestProductAPI.BASE_URL + "/"
 
-    #     data = {
-    #         "name": _client.name,
-    #         "email": _client.email,
-    #         "phone": _client.phone,
-    #     }
+        data = {
+            "code": product.code,
+            "price": product.price,
+            "commission_percent": product.commission_percent,
+        }
 
-    #     # when
-    #     response = client.post(url, data)
+        # when
+        response = client.post(url, data)
 
-    #     # assert
-    #     assert response.status_code == 201
+        # assert
+        assert response.status_code == 201
 
-    #     data = dict(response.data)
-    #     assert data["id"] == 1
-    #     assert data["name"] == _client.name
-    #     assert data["email"] == _client.email
-    #     assert data["phone"] == _client.phone
+        data = dict(response.data)
+        assert data["id"] == 1
+        assert data["code"] == product.code
+        assert data["description"] == product.description
+        assert data["price"] == str(product.price)
+        assert data["commission_percent"] == str(product.commission_percent)
 
-    #     assert Client.objects.count() == 1
+        assert Product.objects.count() == 1

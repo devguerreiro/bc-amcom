@@ -14,5 +14,9 @@ class ProductRepository(IProductRepository):
     def delete_by_id(self, pk: int) -> None:
         Product.objects.filter(id=pk).delete()
 
+    def create(self, product: Product) -> Product:
+        product.save(force_insert=True)
+        return product
+
     def get_commission_percent_limits(self, product: Product) -> List[CommissionPercentLimit]:
         pass
