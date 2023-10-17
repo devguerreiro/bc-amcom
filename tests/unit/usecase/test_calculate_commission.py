@@ -5,7 +5,6 @@ import pytest
 from pytest_mock import MockerFixture
 
 from paper.core.application.usecase.calculate_commission import CalculateCommission
-from paper.core.application.usecase.get_commission_percent import GetCommissionPercent
 
 
 class TestCalculateCommission:
@@ -36,19 +35,22 @@ class TestCalculateCommission:
         sale_item = make_sale_item(product=product, quantity=quantity)
 
         sale_stub = mocker.stub(name="sale")
-        product_repo_stub = mocker.stub(name="product_repo")
         sale_repo_stub = mocker.stub(name="sale_repo")
+        commission_repo_stub = mocker.stub(name="commission_repo")
 
         sale_repo_stub.get_items = mocker.Mock(return_value=[sale_item])
 
         mocker.patch.object(
-            GetCommissionPercent,
-            "handle",
+            CalculateCommission,
+            "_get_commission_percent",
             return_value=commission_percent,
         )
 
         # when
-        output = CalculateCommission(sale_repo_stub, product_repo_stub).handle(sale_stub)
+        output = CalculateCommission(
+            sale_repo_stub,
+            commission_repo_stub,
+        ).handle(sale_stub)
 
         # assert
         assert output == expected
@@ -89,8 +91,8 @@ class TestCalculateCommission:
     ):
         # given
         sale_stub = mocker.stub(name="sale")
-        product_repo_stub = mocker.stub(name="product_repo")
         sale_repo_stub = mocker.stub(name="sale_repo")
+        commission_repo_stub = mocker.stub(name="commission_repo")
 
         sale_items = [
             make_sale_item(
@@ -106,13 +108,120 @@ class TestCalculateCommission:
         sale_repo_stub.get_items = mocker.Mock(return_value=sale_items)
 
         mocker.patch.object(
-            GetCommissionPercent,
-            "handle",
+            CalculateCommission,
+            "_get_commission_percent",
             side_effect=lambda p: p.commission_percent,
         )
 
         # when
-        output = CalculateCommission(sale_repo_stub, product_repo_stub).handle(sale_stub)
+        output = CalculateCommission(
+            sale_repo_stub,
+            commission_repo_stub,
+        ).handle(sale_stub)
 
         # assert
         assert output == expected
+
+    @staticmethod
+    def test_should_return_the_product_s_commission_percent(
+        make_product,
+        make_commission_limit,
+        mocker: MockerFixture,
+    ):
+        # given
+        product = make_product()
+        commission_limit = make_commission_limit(
+            min_commission_percent=product.commission_percent - 1,
+            max_commission_percent=product.commission_percent + 1,
+        )
+
+        sale_repo_stub = mocker.stub(name="sale_repo")
+        commission_repo_stub = mocker.stub(name="commission_repo")
+
+        commission_repo_stub.get_by_weekday = mocker.Mock(return_value=commission_limit)
+
+        # when
+        output = CalculateCommission(
+            sale_repo_stub,
+            commission_repo_stub,
+        )._get_commission_percent(product)
+
+        # assert
+        assert output == product.commission_percent
+
+    @staticmethod
+    def test_should_return_the_min_commission_percent(
+        make_product,
+        make_commission_limit,
+        mocker: MockerFixture,
+    ):
+        # given
+        product = make_product()
+        commission_limit = make_commission_limit(
+            min_commission_percent=product.commission_percent + 1,
+            max_commission_percent=product.commission_percent + 2,
+        )
+
+        sale_repo_stub = mocker.stub(name="sale_repo")
+        commission_repo_stub = mocker.stub(name="commission_repo")
+
+        commission_repo_stub.get_by_weekday = mocker.Mock(return_value=commission_limit)
+
+        # when
+        output = CalculateCommission(
+            sale_repo_stub,
+            commission_repo_stub,
+        )._get_commission_percent(product)
+
+        # assert
+        assert output == commission_limit.min_commission_percent
+
+    @staticmethod
+    def test_should_return_the_max_commission_percent(
+        make_product,
+        make_commission_limit,
+        mocker: MockerFixture,
+    ):
+        # given
+        product = make_product()
+        commission_limit = make_commission_limit(
+            min_commission_percent=product.commission_percent - 2,
+            max_commission_percent=product.commission_percent - 1,
+        )
+
+        sale_repo_stub = mocker.stub(name="sale_repo")
+        commission_repo_stub = mocker.stub(name="commission_repo")
+
+        commission_repo_stub.get_by_weekday = mocker.Mock(return_value=commission_limit)
+
+        # when
+        output = CalculateCommission(
+            sale_repo_stub,
+            commission_repo_stub,
+        )._get_commission_percent(product)
+
+        # assert
+        assert output == commission_limit.max_commission_percent
+
+    @staticmethod
+    def test_should_return_the_product_s_commission_percent_if_no_limit_exists(
+        make_product,
+        make_commission_limit,
+        mocker: MockerFixture,
+    ):
+        # given
+        product = make_product()
+
+        sale_repo_stub = mocker.stub(name="sale_repo")
+        commission_repo_stub = mocker.stub(name="commission_repo")
+
+        commission_repo_stub.get_by_weekday = mocker.Mock(return_value=None)
+
+        # when
+        output = CalculateCommission(
+            sale_repo_stub,
+            commission_repo_stub,
+        )._get_commission_percent(product)
+
+        # assert
+        assert output == product.commission_percent

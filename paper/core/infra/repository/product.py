@@ -1,12 +1,12 @@
 from typing import List
 
-from paper.core.domain.entity.product import CommissionPercentLimit, Product
+from paper.core.domain.entity.product import Product
 from paper.core.domain.repository.product import IProductRepository
 
 
 class ProductRepository(IProductRepository):
     def get_all(self) -> List[Product]:
-        return list(Product.objects.prefetch_related("commission_percent_limits").all())
+        return list(Product.objects.all())
 
     def get_by_id(self, pk: int) -> Product:
         return Product.objects.get(pk=pk)
@@ -17,6 +17,3 @@ class ProductRepository(IProductRepository):
     def create(self, product: Product) -> Product:
         product.save(force_insert=True)
         return product
-
-    def get_commission_percent_limits(self, product: Product) -> List[CommissionPercentLimit]:
-        pass

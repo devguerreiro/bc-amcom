@@ -5,7 +5,8 @@ import pytest
 from model_bakery import baker
 
 from paper.core.domain.entity.client import Client
-from paper.core.domain.entity.product import CommissionPercentLimit, Product
+from paper.core.domain.entity.commission import CommissionLimit
+from paper.core.domain.entity.product import Product
 from paper.core.domain.entity.sale import SaleItem
 from paper.core.domain.entity.seller import Seller
 
@@ -32,9 +33,9 @@ def make_sale_item():
 
 
 @pytest.fixture()
-def make_commission_percent_limit():
+def make_commission_limit():
     def factory(*args, **kwargs) -> Product:
-        return baker.prepare(CommissionPercentLimit, **kwargs)
+        return baker.prepare(CommissionLimit, **kwargs)
 
     return factory
 
