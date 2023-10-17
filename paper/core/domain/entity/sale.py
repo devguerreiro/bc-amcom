@@ -1,4 +1,3 @@
-from django.core.validators import MinValueValidator
 from django.db import models
 
 from paper.core.domain.entity.client import Client
@@ -11,16 +10,15 @@ class SaleItem(models.Model):
         "Sale",
         on_delete=models.CASCADE,
         verbose_name="Venda",
+        related_name="items",
     )
     product = models.ForeignKey(
         Product,
         on_delete=models.PROTECT,
         verbose_name="Produto",
+        related_name="items",
     )
-    quantity = models.IntegerField(
-        validators=[MinValueValidator(1)],
-        verbose_name="Quantidade",
-    )
+    quantity = models.PositiveIntegerField(verbose_name="Quantidade")
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name="Data/hora da venda",
@@ -59,10 +57,11 @@ class Sale(models.Model):
         related_name="sales",
         verbose_name="Vendedor",
     )
-    items = models.ManyToManyField(
+    products = models.ManyToManyField(
         Product,
         through=SaleItem,
-        verbose_name="Itens",
+        related_name="sales",
+        verbose_name="Produtos",
     )
     created_at = models.DateTimeField(
         auto_now_add=True,

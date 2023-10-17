@@ -1,14 +1,12 @@
-from abc import ABC, abstractmethod
 from typing import List
 
 from paper.core.domain.entity.sale import Sale, SaleItem
+from paper.core.domain.repository.sale import ISaleRepository
 
 
-class ISaleRepository(ABC):
-    @abstractmethod
+class SaleRepository(ISaleRepository):
     def get_all(self) -> List[Sale]:
-        pass
+        return list(Sale.objects.all())
 
-    @abstractmethod
     def get_items(self, sale: Sale) -> List[SaleItem]:
         pass

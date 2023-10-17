@@ -7,7 +7,7 @@ from model_bakery import baker
 from paper.core.domain.entity.client import Client
 from paper.core.domain.entity.commission import CommissionLimit
 from paper.core.domain.entity.product import Product
-from paper.core.domain.entity.sale import SaleItem
+from paper.core.domain.entity.sale import Sale, SaleItem
 from paper.core.domain.entity.seller import Seller
 
 baker.generators.add(
@@ -49,6 +49,14 @@ def make_client():
 
 
 @pytest.fixture()
+def make_seller():
+    def factory(*args, **kwargs) -> Product:
+        return baker.prepare(Seller, **kwargs)
+
+    return factory
+
+
+@pytest.fixture()
 def populate_client():
     def factory(*, quantity: int = 1):
         clients = baker.make(Client, _quantity=quantity)
@@ -69,14 +77,6 @@ def populate_seller():
 
 
 @pytest.fixture()
-def make_seller():
-    def factory(*args, **kwargs) -> Product:
-        return baker.prepare(Seller, **kwargs)
-
-    return factory
-
-
-@pytest.fixture()
 def populate_product():
     def factory(*, quantity: int = 1):
         products = baker.make(Product, _quantity=quantity)
@@ -84,3 +84,17 @@ def populate_product():
 
     yield factory
     Product.objects.all().delete()
+
+
+@pytest.fixture()
+def populate_sale():
+    def factory(*, quantity: int = 1):
+        sale = baker.make(Sale, _quantity=quantity, make_m2m=True)
+        return sale
+
+    yield factory
+    Sale.objects.all().delete()
+    SaleItem.objects.all().delete()
+    Product.objects.all().delete()
+    Client.objects.all().delete()
+    Seller.objects.all().delete()
