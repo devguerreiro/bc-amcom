@@ -9,4 +9,6 @@ class CreateSale:
         self._repo = repo
 
     def handle(self, sale: Sale, items: List[SaleItem]) -> Sale:
+        if not items:
+            raise ValueError("Não é possível criar uma venda sem item")
         return self._repo.create(sale, items)

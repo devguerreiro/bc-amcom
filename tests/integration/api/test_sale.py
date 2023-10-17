@@ -102,3 +102,38 @@ class TestSaleAPI:
 
         assert Sale.objects.count() == 1
         assert SaleItem.objects.count() == 1
+
+    @staticmethod
+    def test_should_not_be_able_to_create_a_new_sale_without_an_item(
+        client,
+        make_sale,
+        populate_client,
+        populate_seller,
+    ):
+        # given
+        sale = make_sale()
+
+        _client = populate_client()[0]
+        seller = populate_seller()[0]
+
+        url = TestSaleAPI.BASE_URL + "/"
+
+        data = {
+            "nfe": sale.nfe,
+            "client": _client.id,
+            "seller": seller.id,
+            "items": [],
+        }
+
+        # when
+        response = client.post(url, data, content_type="application/json")
+
+        # assert
+        assert response.status_code == 400
+
+        assert response.data == {
+            "error": "Não é possível criar uma venda sem item",
+        }
+
+        assert Sale.objects.count() == 0
+        assert SaleItem.objects.count() == 0

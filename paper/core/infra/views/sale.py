@@ -31,9 +31,12 @@ class SaleView(ViewSet):
         return Response(data=data, status=status)
 
     def create(self, request: Request):
-        data, status = SaleController(
-            self.repo,
-            self.read_serializer,
-            self.write_serializer,
-        ).create(request.data)
-        return Response(data=data, status=status)
+        try:
+            data, status = SaleController(
+                self.repo,
+                self.read_serializer,
+                self.write_serializer,
+            ).create(request.data)
+            return Response(data=data, status=status)
+        except Exception as e:
+            return Response(data={"error": str(e)}, status=400)
