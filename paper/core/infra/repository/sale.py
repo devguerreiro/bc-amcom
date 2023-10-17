@@ -11,5 +11,8 @@ class SaleRepository(ISaleRepository):
     def get_by_id(self, pk: int) -> Sale:
         return Sale.objects.get(pk=pk)
 
+    def delete_by_id(self, pk: int) -> None:
+        Sale.objects.filter(id=pk).delete()
+
     def get_items(self, sale: Sale) -> List[SaleItem]:
         pass

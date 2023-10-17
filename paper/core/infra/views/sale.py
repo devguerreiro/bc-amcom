@@ -24,3 +24,7 @@ class SaleView(ViewSet):
             self.read_serializer,
         ).retrieve(pk)
         return Response(data=data, status=status)
+
+    def delete(self, _: Request, pk: int):
+        data, status = SaleController(self.repo).delete(pk)
+        return Response(data=data, status=status)

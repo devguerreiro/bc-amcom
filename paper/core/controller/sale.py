@@ -1,3 +1,4 @@
+from paper.core.application.usecase.sale.delete_sale import DeleteSale
 from paper.core.application.usecase.sale.list_sales import ListSales
 from paper.core.application.usecase.sale.retrieve_sale import RetrieveSale
 from paper.core.controller.serializers.sale import ISaleReadSerializer
@@ -22,3 +23,7 @@ class SaleController:
         sales = RetrieveSale(self._repo).handle(pk)
         data = self._read_serializer.to_json(sales)
         return data, 200
+
+    def delete(self, pk: int):
+        DeleteSale(self._repo).handle(pk)
+        return None, 204
