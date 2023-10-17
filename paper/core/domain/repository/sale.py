@@ -10,5 +10,9 @@ class ISaleRepository(ABC):
         pass
 
     @abstractmethod
+    def get_by_id(self, pk: int) -> Sale:
+        pass
+
+    @abstractmethod
     def get_items(self, sale: Sale) -> List[SaleItem]:
         pass

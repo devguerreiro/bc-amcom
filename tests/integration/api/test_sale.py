@@ -28,21 +28,21 @@ class TestSaleAPI:
         assert data[1]["id"] == products[1].id
         assert data[2]["id"] == products[2].id
 
-    # @staticmethod
-    # def test_should_retrieve_an_existing_client(client, populate_client):
-    #     # given
-    #     _client = populate_client()[0]
+    @staticmethod
+    def test_should_retrieve_an_existing_sale(client, populate_sale):
+        # given
+        sale = populate_sale()[0]
 
-    #     url = f"{TestSaleAPI.BASE_URL}/{_client.id}/"
+        url = f"{TestSaleAPI.BASE_URL}/{sale.id}/"
 
-    #     # when
-    #     response = client.get(url)
+        # when
+        response = client.get(url)
 
-    #     # assert
-    #     assert response.status_code == 200
+        # assert
+        assert response.status_code == 200
 
-    #     data = dict(response.data)
-    #     assert data["id"] == _client.id
+        data = dict(response.data)
+        assert data["id"] == sale.id
 
     # @staticmethod
     # def test_should_delete_an_existing_client(client, populate_client):

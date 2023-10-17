@@ -17,3 +17,10 @@ class SaleView(ViewSet):
             self.read_serializer,
         ).list()
         return Response(data=data, status=status)
+
+    def retrieve(self, _: Request, pk: int):
+        data, status = SaleController(
+            self.repo,
+            self.read_serializer,
+        ).retrieve(pk)
+        return Response(data=data, status=status)
