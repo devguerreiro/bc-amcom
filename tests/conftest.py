@@ -57,12 +57,21 @@ def make_seller():
 
 
 @pytest.fixture()
+def make_sale():
+    def factory(*args, **kwargs) -> Product:
+        return baker.prepare(Sale, **kwargs)
+
+    return factory
+
+
+@pytest.fixture()
 def populate_client():
     def factory(*, quantity: int = 1):
         clients = baker.make(Client, _quantity=quantity)
         return clients
 
     yield factory
+    Sale.objects.all().delete()
     Client.objects.all().delete()
 
 
@@ -73,6 +82,7 @@ def populate_seller():
         return sellers
 
     yield factory
+    Sale.objects.all().delete()
     Seller.objects.all().delete()
 
 
@@ -83,6 +93,7 @@ def populate_product():
         return products
 
     yield factory
+    Sale.objects.all().delete()
     Product.objects.all().delete()
 
 

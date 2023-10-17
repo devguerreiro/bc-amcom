@@ -14,5 +14,15 @@ class SaleRepository(ISaleRepository):
     def delete_by_id(self, pk: int) -> None:
         Sale.objects.filter(id=pk).delete()
 
+    def create(self, sale: Sale, items: List[SaleItem]) -> Sale:
+        sale.save(force_insert=True)
+
+        for item in items:
+            item.sale = sale
+
+        SaleItem.objects.bulk_create(items)
+
+        return sale
+
     def get_items(self, sale: Sale) -> List[SaleItem]:
         pass

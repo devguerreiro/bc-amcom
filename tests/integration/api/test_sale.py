@@ -1,6 +1,6 @@
 import pytest
 
-from paper.core.domain.entity.sale import Sale
+from paper.core.domain.entity.sale import Sale, SaleItem
 
 
 @pytest.mark.django_db
@@ -58,29 +58,47 @@ class TestSaleAPI:
 
         assert Sale.objects.count() == 0
 
-    # @staticmethod
-    # def test_should_create_a_new_client(client, make_client):
-    #     # given
-    #     _client = make_client()
+    @staticmethod
+    def test_should_create_a_new_sale(
+        client,
+        make_sale,
+        populate_client,
+        populate_seller,
+        populate_product,
+    ):
+        # given
+        sale = make_sale()
 
-    #     url = TestSaleAPI.BASE_URL + "/"
+        _client = populate_client()[0]
+        seller = populate_seller()[0]
+        product = populate_product()[0]
 
-    #     data = {
-    #         "name": _client.name,
-    #         "email": _client.email,
-    #         "phone": _client.phone,
-    #     }
+        url = TestSaleAPI.BASE_URL + "/"
 
-    #     # when
-    #     response = client.post(url, data)
+        data = {
+            "nfe": sale.nfe,
+            "client": _client.id,
+            "seller": seller.id,
+            "items": [
+                {
+                    "product": product.id,
+                    "quantity": 1,
+                },
+            ],
+        }
 
-    #     # assert
-    #     assert response.status_code == 201
+        # when
+        response = client.post(url, data, content_type="application/json")
 
-    #     data = dict(response.data)
-    #     assert data["id"] == 1
-    #     assert data["name"] == _client.name
-    #     assert data["email"] == _client.email
-    #     assert data["phone"] == _client.phone
+        # assert
+        assert response.status_code == 201
 
-    #     assert Client.objects.count() == 1
+        data = dict(response.data)
+        assert data["id"] == 1
+        assert data["nfe"] == sale.nfe
+        assert data["client"]["id"] == _client.id
+        assert data["seller"]["id"] == seller.id
+        assert data["items"][0]["product"]["id"] == product.id
+
+        assert Sale.objects.count() == 1
+        assert SaleItem.objects.count() == 1

@@ -1,9 +1,9 @@
-from typing import List
+from typing import List, Tuple
 
 from rest_framework import serializers
 
-from paper.core.controller.serializers.sale import ISaleReadSerializer
-from paper.core.domain.entity.sale import Sale
+from paper.core.controller.serializers.sale import ISaleReadSerializer, ISaleWriteSerializer
+from paper.core.domain.entity.sale import Sale, SaleItem
 from paper.core.infra.serializers.client import ClientReadSerializer
 from paper.core.infra.serializers.product import ProductReadSerializer
 from paper.core.infra.serializers.seller import SellerReadSerializer
@@ -28,3 +28,27 @@ class SaleReadSerializer(ISaleReadSerializer):
     def to_json(self, instance: Sale | List[Sale]) -> dict:
         many = type(instance) is list
         return self.Serializer(instance, many=many).data
+
+
+class SaleWriteSerializer(ISaleWriteSerializer):
+    class Serializer(serializers.ModelSerializer):
+        class SaleItemWriteSerializer(serializers.ModelSerializer):
+            class Meta:
+                model = SaleItem
+                fields = ["product", "quantity"]
+
+        items = SaleItemWriteSerializer(many=True)
+
+        class Meta:
+            model = Sale
+            fields = ["nfe", "client", "seller", "items"]
+
+    def validate(self, data: dict) -> Tuple[Sale, List[SaleItem]]:
+        serializer = self.Serializer(data=data)
+        is_valid = serializer.is_valid(raise_exception=True)
+        if is_valid:
+            items = serializer.validated_data.pop("items", [])
+            return (
+                Sale(**serializer.validated_data),
+                [SaleItem(**sale_item) for sale_item in items],
+            )

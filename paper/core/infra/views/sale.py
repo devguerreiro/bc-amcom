@@ -4,12 +4,13 @@ from rest_framework.viewsets import ViewSet
 
 from paper.core.controller.sale import SaleController
 from paper.core.infra.repository.sale import SaleRepository
-from paper.core.infra.serializers.sale import SaleReadSerializer
+from paper.core.infra.serializers.sale import SaleReadSerializer, SaleWriteSerializer
 
 
 class SaleView(ViewSet):
     repo = SaleRepository()
     read_serializer = SaleReadSerializer()
+    write_serializer = SaleWriteSerializer()
 
     def list(self, _: Request):
         data, status = SaleController(
@@ -27,4 +28,12 @@ class SaleView(ViewSet):
 
     def delete(self, _: Request, pk: int):
         data, status = SaleController(self.repo).delete(pk)
+        return Response(data=data, status=status)
+
+    def create(self, request: Request):
+        data, status = SaleController(
+            self.repo,
+            self.read_serializer,
+            self.write_serializer,
+        ).create(request.data)
         return Response(data=data, status=status)
