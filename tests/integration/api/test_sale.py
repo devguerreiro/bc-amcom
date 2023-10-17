@@ -1,5 +1,3 @@
-import json
-
 import pytest
 
 
@@ -16,8 +14,6 @@ class TestSaleAPI:
 
         # when
         response = client.get(url)
-
-        print(json.dumps(response.data))
 
         # assert
         assert response.status_code == 200
