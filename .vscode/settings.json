@@ -4,7 +4,8 @@
         "sale",
         "django admin",
         "calculate commission",
-        "client"
+        "client",
+        "commission"
     ],
     "python.testing.pytestArgs": ["tests"],
     "python.testing.unittestEnabled": false,
