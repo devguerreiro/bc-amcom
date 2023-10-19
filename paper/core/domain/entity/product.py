@@ -10,8 +10,6 @@ class Product(models.Model):
         verbose_name="Código",
     )
     description = models.TextField(
-        blank=True,
-        null=True,
         verbose_name="Descrição",
     )
     price = models.DecimalField(

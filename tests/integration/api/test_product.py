@@ -67,6 +67,7 @@ class TestProductAPI:
 
         data = {
             "code": product.code,
+            "description": product.description,
             "price": product.price,
             "commission_percent": product.commission_percent,
         }
