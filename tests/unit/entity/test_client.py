@@ -1,4 +1,4 @@
-from paper.core.domain.entity.client import Client
+from dunder_mifflin.core.domain.entity.client import Client
 
 
 class TestClient:

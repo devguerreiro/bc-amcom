@@ -1,4 +1,4 @@
-from paper.core.domain.entity.product import Product
+from dunder_mifflin.core.domain.entity.product import Product
 
 
 class TestProduct:

@@ -1,5 +1,5 @@
-from paper.core.domain.entity.product import Product
-from paper.core.domain.entity.sale import Sale, SaleItem
+from dunder_mifflin.core.domain.entity.product import Product
+from dunder_mifflin.core.domain.entity.sale import Sale, SaleItem
 
 
 class TestSale:

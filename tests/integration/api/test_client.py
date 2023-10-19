@@ -1,6 +1,6 @@
 import pytest
 
-from paper.core.domain.entity.client import Client
+from dunder_mifflin.core.domain.entity.client import Client
 
 
 @pytest.mark.django_db

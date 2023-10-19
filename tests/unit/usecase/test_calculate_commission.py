@@ -4,7 +4,7 @@ from typing import List, Tuple
 import pytest
 from pytest_mock import MockerFixture
 
-from paper.core.application.usecase.calculate_commission import CalculateCommission
+from dunder_mifflin.core.application.usecase.calculate_commission import CalculateCommission
 
 
 class TestCalculateCommission:

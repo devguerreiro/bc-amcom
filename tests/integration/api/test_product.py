@@ -1,6 +1,6 @@
 import pytest
 
-from paper.core.domain.entity.product import Product
+from dunder_mifflin.core.domain.entity.product import Product
 
 
 @pytest.mark.django_db

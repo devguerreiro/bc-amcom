@@ -3,8 +3,8 @@ from decimal import Decimal
 import pytest
 from django.core.exceptions import ValidationError
 
-from paper.core.domain.entity.commission import CommissionLimit
-from paper.core.utils.field import Weekday
+from dunder_mifflin.core.domain.entity.commission import CommissionLimit
+from dunder_mifflin.core.utils.field import Weekday
 
 
 class TestCommissionLimit:

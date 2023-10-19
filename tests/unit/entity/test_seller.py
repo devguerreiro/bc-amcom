@@ -1,4 +1,4 @@
-from paper.core.domain.entity.seller import Seller
+from dunder_mifflin.core.domain.entity.seller import Seller
 
 
 class TestSeller:

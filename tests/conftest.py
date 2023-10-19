@@ -4,14 +4,14 @@ from random import random
 import pytest
 from model_bakery import baker
 
-from paper.core.domain.entity.client import Client
-from paper.core.domain.entity.commission import CommissionLimit
-from paper.core.domain.entity.product import Product
-from paper.core.domain.entity.sale import Sale, SaleItem
-from paper.core.domain.entity.seller import Seller
+from dunder_mifflin.core.domain.entity.client import Client
+from dunder_mifflin.core.domain.entity.commission import CommissionLimit
+from dunder_mifflin.core.domain.entity.product import Product
+from dunder_mifflin.core.domain.entity.sale import Sale, SaleItem
+from dunder_mifflin.core.domain.entity.seller import Seller
 
 baker.generators.add(
-    "paper.core.utils.field.CommissionPercentField",
+    "dunder_mifflin.core.utils.field.CommissionPercentField",
     lambda: round(Decimal(random() * 10), 2),
 )
 
