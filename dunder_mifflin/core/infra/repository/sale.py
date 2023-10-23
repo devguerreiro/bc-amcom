@@ -26,3 +26,13 @@ class SaleRepository(ISaleRepository):
 
     def get_items(self, sale: Sale) -> List[SaleItem]:
         pass
+
+    def update(self, sale: Sale, sale_updated: Sale, items: List[SaleItem]) -> Sale:
+        sale.client = sale_updated.client
+        sale.seller = sale_updated.seller
+        sale.save(force_update=True)
+
+        for item in items:
+            SaleItem.objects.update_or_create(
+                sale=sale, product_id=item.product.id, defaults={"quantity": item.quantity}
+            )

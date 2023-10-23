@@ -40,3 +40,14 @@ class SaleView(ViewSet):
             return Response(data=data, status=status)
         except Exception as e:
             return Response(data={"error": str(e)}, status=400)
+
+    def update(self, request: Request, pk: int):
+        try:
+            data, status = SaleController(
+                self.repo,
+                self.read_serializer,
+                self.write_serializer,
+            ).update(request.data, pk)
+            return Response(data=data, status=status)
+        except Exception as e:
+            return Response(data={"error": str(e)}, status=400)

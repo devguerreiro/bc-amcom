@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 
 from dunder_mifflin.core.domain.entity.client import Client
@@ -40,11 +42,7 @@ class SaleItem(models.Model):
 
 
 class Sale(models.Model):
-    nfe = models.CharField(
-        max_length=50,
-        unique=True,
-        verbose_name="Código NFE",
-    )
+    nfe = models.CharField(max_length=50, unique=True, verbose_name="Código NFE", default=uuid.uuid4)
     client = models.ForeignKey(
         Client,
         on_delete=models.PROTECT,

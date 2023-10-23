@@ -24,3 +24,7 @@ class ISaleRepository(ABC):
     @abstractmethod
     def get_items(self, sale: Sale) -> List[SaleItem]:
         pass
+
+    @abstractmethod
+    def update(self, sale: Sale, new: Sale, items: List[SaleItem]) -> Sale:
+        pass

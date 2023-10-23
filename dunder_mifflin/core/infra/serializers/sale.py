@@ -41,7 +41,7 @@ class SaleWriteSerializer(ISaleWriteSerializer):
 
         class Meta:
             model = Sale
-            fields = ["nfe", "client", "seller", "items"]
+            fields = ["client", "seller", "items"]
 
     def validate(self, data: dict) -> Tuple[Sale, List[SaleItem]]:
         serializer = self.Serializer(data=data)
