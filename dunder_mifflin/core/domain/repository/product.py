@@ -20,3 +20,7 @@ class IProductRepository(ABC):
     @abstractmethod
     def create(self, product: Product) -> Product:
         pass
+
+    @abstractmethod
+    def get_by_params(self, query_params: dict) -> List[Product]:
+        pass

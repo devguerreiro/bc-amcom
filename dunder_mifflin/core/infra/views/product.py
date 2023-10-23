@@ -12,11 +12,17 @@ class ProductView(ViewSet):
     read_serializer = ProductReadSerializer()
     write_serializer = ProductWriteSerializer()
 
-    def list(self, _: Request):
-        data, status = ProductController(
-            self.repo,
-            self.read_serializer,
-        ).list()
+    def list(self, request: Request):
+        if request.query_params:
+            data, status = ProductController(
+                self.repo,
+                self.read_serializer,
+            ).get_by_params(request.query_params)
+        else:
+            data, status = ProductController(
+                self.repo,
+                self.read_serializer,
+            ).list()
         return Response(data=data, status=status)
 
     def retrieve(self, _: Request, pk: int):

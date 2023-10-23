@@ -1,6 +1,7 @@
 from dunder_mifflin.core.application.usecase.product.create_product import CreateProduct
 from dunder_mifflin.core.application.usecase.product.delete_product import DeleteProduct
 from dunder_mifflin.core.application.usecase.product.list_products import ListProducts
+from dunder_mifflin.core.application.usecase.product.list_products_by_params import ListProductsByParams
 from dunder_mifflin.core.application.usecase.product.retrieve_product import RetrieveProduct
 from dunder_mifflin.core.controller.serializers.product import IProductReadSerializer, IProductWriteSerializer
 from dunder_mifflin.core.domain.repository.product import IProductRepository
@@ -36,3 +37,8 @@ class ProductController:
         new_product = CreateProduct(self._repo).handle(valid_product)
         data = self._read_serializer.to_json(new_product)
         return data, 201
+
+    def get_by_params(self, query_params: dict):
+        products = ListProductsByParams(self._repo).handle(query_params)
+        data = self._read_serializer.to_json(products)
+        return data, 200
