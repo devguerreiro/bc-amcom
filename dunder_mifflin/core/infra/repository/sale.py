@@ -1,3 +1,4 @@
+from datetime import date
 from typing import List
 
 from dunder_mifflin.core.domain.entity.sale import Sale, SaleItem
@@ -24,9 +25,6 @@ class SaleRepository(ISaleRepository):
 
         return sale
 
-    def get_items(self, sale: Sale) -> List[SaleItem]:
-        pass
-
     def update(self, sale: Sale, sale_updated: Sale, items: List[SaleItem]) -> Sale:
         sale.client = sale_updated.client
         sale.seller = sale_updated.seller
@@ -36,3 +34,11 @@ class SaleRepository(ISaleRepository):
             SaleItem.objects.update_or_create(
                 sale=sale, product_id=item.product.id, defaults={"quantity": item.quantity}
             )
+
+    def get_commissions(self, start_date: date, end_date: date) -> List[Sale]:
+        return list(
+            Sale.objects.select_related("seller")
+            .prefetch_related("items__product")
+            .filter(created_at__lte=end_date, created_at__gte=start_date)
+            .all()
+        )

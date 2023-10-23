@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from datetime import date
 from typing import List
 
 from dunder_mifflin.core.domain.entity.sale import Sale, SaleItem
@@ -22,9 +23,9 @@ class ISaleRepository(ABC):
         pass
 
     @abstractmethod
-    def get_items(self, sale: Sale) -> List[SaleItem]:
+    def update(self, sale: Sale, new: Sale, items: List[SaleItem]) -> Sale:
         pass
 
     @abstractmethod
-    def update(self, sale: Sale, new: Sale, items: List[SaleItem]) -> Sale:
+    def get_commissions(self, start_date: date, end_date: date) -> List[Sale]:
         pass

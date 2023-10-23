@@ -1,9 +1,13 @@
+from datetime import date
+
+from dunder_mifflin.core.application.usecase.calculate_commission import CalculateCommission
 from dunder_mifflin.core.application.usecase.sale.create_sale import CreateSale
 from dunder_mifflin.core.application.usecase.sale.delete_sale import DeleteSale
 from dunder_mifflin.core.application.usecase.sale.list_sales import ListSales
 from dunder_mifflin.core.application.usecase.sale.retrieve_sale import RetrieveSale
 from dunder_mifflin.core.application.usecase.sale.update_sale import UpdateSale
 from dunder_mifflin.core.controller.serializers.sale import ISaleReadSerializer, ISaleWriteSerializer
+from dunder_mifflin.core.domain.repository.commission_limit import ICommissionLimitRepository
 from dunder_mifflin.core.domain.repository.sale import ISaleRepository
 
 
@@ -13,8 +17,10 @@ class SaleController:
         repo: ISaleRepository,
         read_serializer: ISaleReadSerializer = None,
         write_serializer: ISaleWriteSerializer = None,
+        commission_repo: ICommissionLimitRepository = None,
     ) -> None:
         self._repo = repo
+        self._commission_repo = commission_repo
         self._read_serializer = read_serializer
         self._write_serializer = write_serializer
 
@@ -44,3 +50,7 @@ class SaleController:
         new_sale = UpdateSale(self._repo).handle(sale, valid_sale, valid_items)
         data = self._read_serializer.to_json(new_sale)
         return data, 200
+
+    def get_commissions(self, start_date: date, end_date: date):
+        calculated = CalculateCommission(self._repo, self._commission_repo).handle(start_date, end_date)
+        return calculated, 200
