@@ -61,14 +61,11 @@ class TestSaleAPI:
     @staticmethod
     def test_should_create_a_new_sale(
         client,
-        make_sale,
         populate_client,
         populate_seller,
         populate_product,
     ):
         # given
-        sale = make_sale()
-
         _client = populate_client()[0]
         seller = populate_seller()[0]
         product = populate_product()[0]
@@ -76,7 +73,6 @@ class TestSaleAPI:
         url = TestSaleAPI.BASE_URL + "/"
 
         data = {
-            "nfe": sale.nfe,
             "client": _client.id,
             "seller": seller.id,
             "items": [
@@ -95,7 +91,7 @@ class TestSaleAPI:
 
         data = dict(response.data)
         assert data["id"] == 1
-        assert data["nfe"] == sale.nfe
+        assert data["nfe"]
         assert data["client"]["id"] == _client.id
         assert data["seller"]["id"] == seller.id
         assert data["items"][0]["product"]["id"] == product.id
