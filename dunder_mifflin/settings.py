@@ -47,8 +47,22 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "corsheaders",
     "rest_framework",
+    "drf_spectacular",
     "dunder_mifflin.core",
 ]
+
+REST_FRAMEWORK = {
+    # YOUR SETTINGS
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Dunder Mifflin API",
+    "DESCRIPTION": "The best paper's company",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    # OTHER SETTINGS
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -87,13 +101,9 @@ WSGI_APPLICATION = "dunder_mifflin.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DJANGO_DB_NAME"),
-        "USER": os.getenv("DJANGO_DB_USER"),
-        "PASSWORD": os.getenv("DJANGO_DB_PASS"),
-        "HOST": os.getenv("DJANGO_DB_HOST"),
-        "PORT": os.getenv("DJANGO_DB_PORT"),
-    },
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",  # noqa
+    }
 }
 
 
