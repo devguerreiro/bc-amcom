@@ -1,5 +1,5 @@
 # bc-amcom
-🔴 Backend Challenge AMcom - Built using Django Rest, Postgres, Docker with Clean Arch + DDD + TDD
+🟢 Backend Challenge AMcom - Built using Django Rest, Postgres, Docker with Clean Arch + DDD + TDD
 
 Esta API foi desenvolvida utilizando Django Rest Framework com o banco de dados Postgres.
 
