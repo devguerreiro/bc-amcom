@@ -1,0 +1,48 @@
+version: "3"
+services:
+    amcom_backend:
+        container_name: amcom_backend
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: amcom_backend
+        environment:
+            - DJANGO_SECRET_KEY=some_secret_key
+            - DJANGO_SUPERUSER_USERNAME=admin
+            - DJANGO_SUPERUSER_PASSWORD=admin
+            - DJANGO_DB_NAME=dunder_mifflin
+            - DJANGO_DB_USER=db_user
+            - DJANGO_DB_PASS=db_pass
+            - DJANGO_DB_HOST=amcom_db
+            - DJANGO_DB_PORT=5432
+        networks:
+            - amcom_network
+        ports:
+            - 8000:8000
+        restart: always
+        depends_on:
+            amcom_db:
+                condition: service_healthy
+        entrypoint: ./entrypoint.sh
+
+    amcom_db:
+        container_name: amcom_db
+        image: postgres:16
+        environment:
+            - POSTGRES_DB=dunder_mifflin
+            - POSTGRES_USER=db_user
+            - POSTGRES_PASSWORD=db_pass
+        networks:
+            - amcom_network
+        restart: always
+        healthcheck:
+            test: pg_isready -d dunder_mifflin -q
+            start_period: 10s
+        volumes:
+            - db_volume:/var/lib/postgresql/data
+
+networks:
+    amcom_network:
+
+volumes:
+    db_volume:
