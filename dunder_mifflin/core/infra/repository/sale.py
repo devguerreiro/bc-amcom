@@ -39,6 +39,9 @@ class SaleRepository(ISaleRepository):
         return list(
             Sale.objects.select_related("seller")
             .prefetch_related("items__product")
-            .filter(created_at__lte=end_date, created_at__gte=start_date)
+            .filter(
+                created_at__date__lte=end_date,
+                created_at__date__gte=start_date,
+            )
             .all()
         )
