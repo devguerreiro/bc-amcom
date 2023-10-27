@@ -10,11 +10,7 @@ RUN pip3 install poetry
 
 COPY pyproject.toml manage.py ${WORKDIR}/
 
-RUN poetry export -f requirements.txt -o requirements.txt --without-hashes
-
-COPY dunder_mifflin ${WORKDIR}/dunder_mifflin/
-
-RUN pip3 install -r requirements.txt
+RUN poetry export -f requirements.txt -o requirements.txt --without-hashes && pip3 install -r requirements.txt
 
 ARG port=8000
 
@@ -41,5 +37,7 @@ ENV DJANGO_SECRET_KEY="some_secret_key" \
     DJANGO_DB_PORT=${db_port}
 
 COPY entrypoint.sh ${WORKDIR}/
+
+COPY dunder_mifflin ${WORKDIR}/dunder_mifflin/
 
 ENTRYPOINT ["./entrypoint.sh"]

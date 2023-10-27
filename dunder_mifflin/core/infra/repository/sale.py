@@ -1,6 +1,8 @@
 from datetime import date
 from typing import List
 
+from django.db.models import Q
+
 from dunder_mifflin.core.domain.entity.sale import Sale, SaleItem
 from dunder_mifflin.core.domain.repository.sale import ISaleRepository
 
@@ -34,6 +36,13 @@ class SaleRepository(ISaleRepository):
             SaleItem.objects.update_or_create(
                 sale=sale, product_id=item.product.id, defaults={"quantity": item.quantity}
             )
+
+        SaleItem.objects.filter(
+            ~Q(
+                product_id__in=[item.product.id for item in items],
+            ),
+            sale=sale,
+        ).delete()
 
     def get_commissions(self, start_date: date, end_date: date) -> List[Sale]:
         return list(
