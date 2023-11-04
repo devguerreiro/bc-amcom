@@ -11,6 +11,11 @@ Para executar, basta realizar o clone deste repositorio e executar o seguinte co
 
 `docker compose up -d`
 
+Usuario default:
+
+- Usuario: admin
+- Senha: admin
+
 A API estara rodando no endereco **localhost:8000**.
 
 A documentacao da API pode ser acessada em [localhost:8000/api/schema/swagger-ui/](http://localhost:8000/api/schema/swagger-ui/)
